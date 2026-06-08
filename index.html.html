@@ -2,6 +2,10 @@ cat > /home/claude/chaluj-burger.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="sk">
 <head>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chaluj Burger & Beer — Stará Ľubovňa</title>
@@ -331,6 +335,11 @@ cat > /home/claude/chaluj-burger.html << 'HTMLEOF'
 <!-- NAV -->
 <nav>
   <div class="nav-logo">Chaluj<span> Burger</span></div>
+
+  <button class="hamburger" id="hamburger">
+      ☰
+  </button>
+
   <ul class="nav-links">
     <li><a href="#special">Špeciál</a></li>
     <li><a href="#menu">Menu</a></li>
@@ -405,10 +414,7 @@ cat > /home/claude/chaluj-burger.html << 'HTMLEOF'
           <span class="tag">🧅 Slaninka</span>
           <span class="tag">🍺 Ideálne s pivom</span>
         </div>
-        <a href="tel:+421918337708" class="btn-primary">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          Objednať so sebou
-        </a>
+        
         <p class="urgency">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
           Dostupný len tento mesiac · Kým zásoby vydržia
@@ -949,6 +955,43 @@ cat > /home/claude/chaluj-burger.html << 'HTMLEOF'
 
 <style>
   /* Oprava mriežky pre rozdelenie pätičky na 2 stĺpce */
+  .hamburger{
+    display:none;
+    background:none;
+    border:none;
+    color:white;
+    font-size:2rem;
+    cursor:pointer;
+}
+
+@media (max-width:768px){
+
+    .hamburger{
+        display:block;
+    }
+
+    .nav-links{
+        display:none;
+        position:absolute;
+        top:100%;
+        right:0;
+        width:220px;
+        background:#111;
+        flex-direction:column;
+        padding:1rem;
+        gap:1rem;
+        border-radius:0 0 0 10px;
+        box-shadow:0 10px 30px rgba(0,0,0,.4);
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .nav-cta{
+        display:none;
+    }
+}
   .footer-top {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1040,6 +1083,14 @@ cat > /home/claude/chaluj-burger.html << 'HTMLEOF'
   window.addEventListener('scroll', () => {
     nav.style.background = window.scrollY > 60 ? 'rgba(13,13,13,0.97)' : 'rgba(13,13,13,0.85)';
   }, { passive: true });
+</script>
+<script>
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.querySelector('.nav-links');
+
+hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+});
 </script>
 </body>
 </html>
