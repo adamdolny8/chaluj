@@ -1,0 +1,1045 @@
+cat > /home/claude/chaluj-burger.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaluj Burger & Beer — Stará Ľubovňa</title>
+<meta name="description" content="Prémiové remeselné burgre a vychladené pivo v Starej Ľubovni. Jedlo na mieste aj so sebou. Volajte 0918 337 708.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black:#0d0d0d; --dark:#111111; --dark2:#1a1a1a; --dark3:#222222;
+    --amber:#F2A900; --amber2:#e09500; --amber3:#ffc340;
+    --white:#ffffff; --gray:#E0E0E0; --gray2:#aaaaaa; --gray3:#555555;
+    --red:#e03a2f;
+    --font-head:'Bebas Neue',cursive; --font-sub:'Oswald',sans-serif; --font-body:'DM Sans',sans-serif;
+    --radius:6px; --transition:.25s cubic-bezier(.4,0,.2,1);
+  }
+  html { scroll-behavior:smooth; font-size:16px; }
+  body { background:var(--dark); color:var(--white); font-family:var(--font-body); line-height:1.6; overflow-x:hidden; }
+  img { display:block; max-width:100%; }
+  a { color:inherit; text-decoration:none; }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity:.03; pointer-events:none; z-index:9999;
+  }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:.9rem 1.5rem;
+    background:rgba(13,13,13,.85); backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(242,169,0,.12);
+    transition:background var(--transition);
+  }
+  .nav-logo { font-family:var(--font-head); font-size:1.55rem; letter-spacing:.08em; color:var(--amber); line-height:1; }
+  .nav-logo span { color:var(--white); }
+  .nav-links { display:flex; gap:1.8rem; list-style:none; }
+  .nav-links a { font-family:var(--font-sub); font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gray); transition:color var(--transition); }
+  .nav-links a:hover { color:var(--amber); }
+  .nav-cta { background:var(--amber); color:var(--black)!important; padding:.45rem 1.1rem; border-radius:var(--radius); font-weight:600!important; transition:background var(--transition),transform var(--transition)!important; }
+  .nav-cta:hover { background:var(--amber3)!important; transform:scale(1.04); }
+
+  /* HERO */
+  #hero { position:relative; min-height:100svh; display:flex; align-items:center; overflow:hidden; }
+  .hero-bg {
+    position:absolute; inset:0;
+    background:linear-gradient(160deg,rgba(13,13,13,.93) 0%,rgba(13,13,13,.62) 55%,rgba(13,13,13,.9) 100%),
+      url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1600&q=80') center/cover no-repeat;
+    transform:scale(1.08);
+    animation:slowzoom 18s ease-in-out infinite alternate;
+  }
+  @keyframes slowzoom { from{transform:scale(1.08)} to{transform:scale(1.16)} }
+  .hero-content {
+    position:relative; z-index:1;
+    /* Zvýšený padding-top, aby text nekryl štatistiky */
+    padding:7rem 1.5rem 10rem;
+    max-width:720px;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:.5rem;
+    background:rgba(242,169,0,.15); border:1px solid rgba(242,169,0,.35);
+    border-radius:100px; padding:.3rem .9rem;
+    font-family:var(--font-sub); font-size:.72rem; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:1.4rem;
+    animation:fadeup .8s ease both;
+  }
+  .hero-badge .dot { width:6px; height:6px; background:var(--amber); border-radius:50%; animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+  h1.hero-title {
+    font-family:var(--font-head); font-size:clamp(3rem,9vw,6.5rem);
+    line-height:.95; letter-spacing:.02em; text-transform:uppercase;
+    color:var(--white); margin-bottom:1.2rem;
+    animation:fadeup .8s .1s ease both;
+  }
+  h1.hero-title em { font-style:normal; color:var(--amber); display:block; }
+  .hero-sub { font-size:1rem; color:var(--gray); max-width:480px; margin-bottom:2.2rem; font-weight:300; animation:fadeup .8s .2s ease both; }
+  .hero-btns { display:flex; flex-wrap:wrap; gap:.8rem; animation:fadeup .8s .3s ease both; }
+
+  /* Štatistiky - presunuté POD tlačidlá, nie absolute */
+  .hero-stats {
+    display:flex; gap:1.5rem; flex-wrap:wrap;
+    margin-top:2.5rem;
+    animation:fadeup .8s .5s ease both;
+  }
+  .stat { border-left:2px solid rgba(242,169,0,.4); padding-left:1rem; }
+  .stat-num { font-family:var(--font-head); font-size:2rem; color:var(--amber); line-height:1; }
+  .stat-lbl { font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gray2); font-family:var(--font-sub); }
+  @keyframes fadeup { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  .btn-primary {
+    display:inline-flex; align-items:center; gap:.5rem;
+    background:var(--amber); color:var(--black);
+    font-family:var(--font-sub); font-weight:700; font-size:.95rem; letter-spacing:.06em; text-transform:uppercase;
+    padding:.85rem 1.8rem; border-radius:var(--radius); border:2px solid var(--amber); cursor:pointer;
+    transition:background var(--transition),transform var(--transition),box-shadow var(--transition);
+    box-shadow:0 4px 24px rgba(242,169,0,.3);
+  }
+  .btn-primary:hover { background:var(--amber3); border-color:var(--amber3); transform:translateY(-2px); box-shadow:0 8px 32px rgba(242,169,0,.45); }
+  .btn-outline {
+    display:inline-flex; align-items:center; gap:.5rem;
+    background:transparent; color:var(--white);
+    font-family:var(--font-sub); font-weight:600; font-size:.95rem; letter-spacing:.06em; text-transform:uppercase;
+    padding:.85rem 1.8rem; border-radius:var(--radius); border:2px solid rgba(255,255,255,.3); cursor:pointer;
+    transition:border-color var(--transition),background var(--transition),transform var(--transition);
+  }
+  .btn-outline:hover { border-color:var(--amber); color:var(--amber); transform:translateY(-2px); }
+
+  /* SECTION COMMON */
+  section { padding:5rem 1.5rem; }
+  .section-label {
+    font-family:var(--font-sub); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:.6rem;
+    display:flex; align-items:center; gap:.6rem;
+  }
+  .section-label::after { content:''; flex:1; max-width:40px; height:1px; background:var(--amber); opacity:.5; }
+  h2.section-title { font-family:var(--font-head); font-size:clamp(2.5rem,6vw,4.5rem); line-height:1; text-transform:uppercase; letter-spacing:.02em; margin-bottom:1rem; }
+  .section-inner { max-width:1100px; margin:0 auto; }
+
+  /* BURGER MESIACA */
+  #special { background:var(--dark2); position:relative; overflow:hidden; }
+  #special::before {
+    content:''; position:absolute; top:-80px; right:-80px;
+    width:340px; height:340px;
+    background:radial-gradient(circle,rgba(242,169,0,.12) 0%,transparent 70%);
+    border-radius:50%; pointer-events:none;
+  }
+  .special-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+  .special-img-wrap { position:relative; border-radius:12px; overflow:hidden; }
+  .special-img-wrap img { width:100%; height:380px; object-fit:cover; filter:saturate(1.1); transition:transform .6s ease; }
+  .special-img-wrap:hover img { transform:scale(1.04); }
+  .special-badge-img {
+    position:absolute; top:1rem; left:1rem;
+    background:var(--red); color:var(--white);
+    font-family:var(--font-sub); font-size:.7rem; letter-spacing:.15em; text-transform:uppercase;
+    padding:.3rem .8rem; border-radius:100px; font-weight:600;
+  }
+  .special-title { font-family:var(--font-head); font-size:clamp(3rem,6vw,5rem); line-height:.9; text-transform:uppercase; color:var(--amber); letter-spacing:.03em; margin:.6rem 0 1rem; }
+  .special-desc { color:var(--gray); font-size:1rem; line-height:1.7; margin-bottom:1.6rem; font-weight:300; }
+  .special-tags { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.8rem; }
+  .tag { font-family:var(--font-sub); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; padding:.3rem .8rem; border-radius:100px; border:1px solid rgba(255,255,255,.15); color:var(--gray2); }
+  .tag.hot { border-color:rgba(224,58,47,.5); color:#ff6b5e; }
+  .urgency { display:flex; align-items:center; gap:.5rem; font-size:.82rem; color:var(--gray2); font-style:italic; margin-top:1rem; }
+  .urgency svg { color:var(--amber); flex-shrink:0; }
+
+  /* MENU TABS */
+  #menu { background:var(--dark); }
+  .tabs { display:flex; gap:0; border-bottom:2px solid var(--dark3); margin-bottom:2.5rem; overflow-x:auto; scrollbar-width:none; flex-wrap:wrap; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab-btn {
+    background:none; border:none;
+    font-family:var(--font-sub); font-size:.82rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--gray3); padding:.9rem 1.2rem; cursor:pointer; position:relative; white-space:nowrap;
+    transition:color var(--transition); flex-shrink:0;
+  }
+  .tab-btn::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:2px; background:var(--amber); transform:scaleX(0); transition:transform var(--transition); }
+  .tab-btn.active { color:var(--amber); }
+  .tab-btn.active::after { transform:scaleX(1); }
+  .tab-btn:hover { color:var(--gray); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+
+  /* MENU CARD */
+  .menu-card {
+    background:var(--dark2); border:1px solid rgba(255,255,255,.06);
+    border-radius:10px; padding:1.2rem 1.3rem;
+    display:flex; flex-direction:column; gap:.5rem;
+    transition:border-color var(--transition),transform var(--transition);
+    position:relative; overflow:hidden;
+  }
+  .menu-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--amber),transparent); opacity:0; transition:opacity var(--transition); }
+  .menu-card:hover { border-color:rgba(242,169,0,.25); transform:translateY(-2px); }
+  .menu-card:hover::before { opacity:1; }
+  .card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:.5rem; }
+  .card-name { font-family:var(--font-sub); font-size:1rem; font-weight:600; letter-spacing:.04em; line-height:1.2; }
+  .card-price { font-family:var(--font-head); font-size:1.3rem; color:var(--amber); white-space:nowrap; }
+  .card-price-double { font-size:.8rem; color:var(--gray2); }
+  .card-desc { font-size:.82rem; color:var(--gray2); line-height:1.5; font-weight:300; }
+  .card-allergens { font-size:.7rem; color:var(--gray3); margin-top:.1rem; }
+  .card-badges { display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.2rem; }
+  .badge { font-family:var(--font-sub); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; padding:.15rem .55rem; border-radius:100px; font-weight:600; }
+  .badge-hot { background:rgba(224,58,47,.2); color:#ff6b5e; border:1px solid rgba(224,58,47,.3); }
+  .badge-best { background:rgba(242,169,0,.18); color:var(--amber); border:1px solid rgba(242,169,0,.3); }
+  .badge-new { background:rgba(80,200,120,.15); color:#6ee89b; border:1px solid rgba(80,200,120,.3); }
+  .badge-veg { background:rgba(80,180,80,.15); color:#7ee87e; border:1px solid rgba(80,180,80,.3); }
+
+  /* Menu category heading */
+  .menu-category-heading {
+    grid-column:1/-1;
+    font-family:var(--font-head);
+    font-size:1.6rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--amber);
+    border-bottom:1px solid rgba(242,169,0,.2);
+    padding-bottom:.4rem;
+    margin-top:.5rem;
+  }
+  .menu-note {
+    grid-column:1/-1;
+    font-size:.8rem; color:var(--gray3); font-style:italic;
+    padding:.4rem 0;
+  }
+
+  /* REVIEWS */
+  #reviews { background:var(--dark2); }
+  .rating-hero {
+    display:flex; align-items:center; gap:1.2rem;
+    margin-bottom:2.5rem; padding:1.2rem 1.5rem;
+    background:var(--dark3); border-radius:10px; border:1px solid rgba(242,169,0,.15);
+    width:fit-content;
+  }
+  .rating-num { font-family:var(--font-head); font-size:3.5rem; color:var(--amber); line-height:1; }
+  .stars { display:flex; gap:.15rem; margin-bottom:.2rem; }
+  .star { color:var(--amber); font-size:1.1rem; }
+  .rating-label { font-size:.78rem; color:var(--gray2); }
+  .google-badge { display:flex; align-items:center; gap:.4rem; font-size:.72rem; color:var(--gray2); margin-top:.3rem; font-family:var(--font-sub); letter-spacing:.06em; text-transform:uppercase; }
+  .google-g { width:16px; height:16px; background:linear-gradient(135deg,#4285f4 25%,#ea4335 25%,#ea4335 50%,#fbbc04 50%,#fbbc04 75%,#34a853 75%); border-radius:50%; flex-shrink:0; }
+  .reviews-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
+  .review-card { background:var(--dark3); border-radius:10px; padding:1.4rem; border:1px solid rgba(255,255,255,.05); display:flex; flex-direction:column; gap:.8rem; transition:border-color var(--transition); }
+  .review-card:hover { border-color:rgba(242,169,0,.2); }
+  .review-stars { color:var(--amber); }
+  .review-text { font-size:.9rem; color:var(--gray); line-height:1.65; font-style:italic; font-weight:300; }
+  .review-text::before { content:'"'; font-family:Georgia,serif; font-size:1.4rem; color:var(--amber); line-height:0; vertical-align:-.3em; margin-right:.2rem; }
+  .review-author { display:flex; align-items:center; gap:.6rem; margin-top:auto; }
+  .author-avatar { width:34px; height:34px; background:var(--amber); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-sub); font-weight:700; font-size:.85rem; color:var(--black); flex-shrink:0; }
+  .author-name { font-family:var(--font-sub); font-size:.82rem; font-weight:600; letter-spacing:.04em; }
+  .author-city { font-size:.72rem; color:var(--gray2); }
+  .review-date { font-size:.7rem; color:var(--gray3); margin-left:auto; }
+
+  /* MAP EMBED */
+  .map-embed-wrap {
+    border-radius:10px; overflow:hidden;
+    border:1px solid rgba(242,169,0,.15);
+    margin-bottom:1.2rem;
+  }
+  .map-embed-wrap iframe { display:block; width:100%; height:220px; border:0; filter:grayscale(.7) invert(.9) hue-rotate(175deg); }
+
+  /* FOOTER */
+  footer { background:var(--black); border-top:1px solid rgba(242,169,0,.15); padding:4rem 1.5rem 2rem; }
+  .footer-inner { max-width:1100px; margin:0 auto; }
+  .footer-top { display:grid; grid-template-columns:repeat(3,1fr); gap:3rem; margin-bottom:3rem; padding-bottom:3rem; border-bottom:1px solid rgba(255,255,255,.06); }
+  .footer-logo { font-family:var(--font-head); font-size:2rem; letter-spacing:.06em; color:var(--amber); margin-bottom:.5rem; }
+  .footer-logo span { color:var(--white); }
+  .footer-col-title { font-family:var(--font-sub); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--amber); margin-bottom:1.2rem; }
+  .hours-table { width:100%; border-collapse:collapse; }
+  .hours-table tr { border-bottom:1px solid rgba(255,255,255,.04); }
+  .hours-table td { padding:.45rem 0; font-size:.88rem; }
+  .hours-table td:last-child { color:var(--gray2); text-align:right; }
+  .hours-table tr.today td { color:var(--amber); font-weight:600; }
+  .hours-table tr.closed td:last-child { color:var(--gray3); }
+  .addr-block { font-size:.9rem; color:var(--gray); line-height:1.7; margin-bottom:1rem; }
+  .map-link {
+    display:inline-flex; align-items:center; gap:.4rem;
+    font-family:var(--font-sub); font-size:.78rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--amber); border:1px solid rgba(242,169,0,.35);
+    padding:.45rem 1rem; border-radius:var(--radius);
+    transition:background var(--transition),color var(--transition);
+  }
+  .map-link:hover { background:var(--amber); color:var(--black); }
+  .contact-phone { font-family:var(--font-head); font-size:1.8rem; color:var(--white); letter-spacing:.04em; margin-bottom:.5rem; }
+  .contact-phone a { transition:color var(--transition); }
+  .contact-phone a:hover { color:var(--amber); }
+  .social-links { display:flex; gap:.8rem; margin-top:1.2rem; }
+  .social-btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:40px; height:40px; background:var(--dark2);
+    border:1px solid rgba(255,255,255,.1); border-radius:8px; color:var(--gray);
+    transition:background var(--transition),border-color var(--transition),color var(--transition);
+    font-size:1.1rem;
+  }
+  .social-btn:hover { background:var(--amber); border-color:var(--amber); color:var(--black); }
+  .footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; font-size:.75rem; color:var(--gray3); }
+  .footer-bottom a { color:var(--gray2); transition:color var(--transition); }
+  .footer-bottom a:hover { color:var(--amber); }
+
+  /* WIFI / INFO BAR */
+  .info-bar {
+    background:var(--dark3); border:1px solid rgba(242,169,0,.1);
+    border-radius:8px; padding:.8rem 1.2rem;
+    display:flex; flex-wrap:wrap; gap:.8rem 2rem;
+    font-size:.8rem; color:var(--gray2);
+    margin-top:1.5rem;
+  }
+  .info-bar strong { color:var(--amber); font-family:var(--font-sub); }
+
+  /* FLOAT CTA */
+  .float-cta { display:none; position:fixed; bottom:1.2rem; left:50%; transform:translateX(-50%); z-index:99; width:calc(100% - 3rem); max-width:400px; }
+  .float-cta a {
+    display:flex; align-items:center; justify-content:center; gap:.5rem;
+    background:var(--amber); color:var(--black);
+    font-family:var(--font-sub); font-weight:700; font-size:1rem; letter-spacing:.06em; text-transform:uppercase;
+    padding:1rem; border-radius:10px;
+    box-shadow:0 8px 32px rgba(242,169,0,.45);
+    transition:background var(--transition),transform var(--transition);
+  }
+  .float-cta a:hover { background:var(--amber3); transform:scale(1.02); }
+
+  .divider { width:100%; max-width:1100px; margin:0 auto; height:1px; background:linear-gradient(90deg,transparent,rgba(242,169,0,.25),transparent); }
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity .6s ease,transform .6s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  .reveal-d1 { transition-delay:.1s; }
+  .reveal-d2 { transition-delay:.2s; }
+  .reveal-d3 { transition-delay:.3s; }
+
+  @media (max-width:768px) {
+    nav { padding:.8rem 1rem; }
+    .nav-links { display:none; }
+    .hero-content { padding:6rem 1rem 4rem; }
+    .special-grid { grid-template-columns:1fr; gap:1.5rem; }
+    .special-img-wrap img { height:260px; }
+    .tab-panel.active { grid-template-columns:1fr; }
+    .reviews-grid { grid-template-columns:1fr; }
+    .footer-top { grid-template-columns:1fr; gap:2rem; }
+    .float-cta { display:block; }
+    footer { padding-bottom:6rem; }
+    .map-embed-wrap iframe { height:180px; }
+  }
+  @media (min-width:769px) and (max-width:1024px) {
+    .reviews-grid { grid-template-columns:1fr 1fr; }
+    .tab-panel.active { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Chaluj<span> Burger</span></div>
+  <ul class="nav-links">
+    <li><a href="#special">Špeciál</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#reviews">Recenzie</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+    <li><a class="nav-cta" href="tel:+421918337708">📞 Objednať</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Stará Ľubovňa · Remeselné burgre
+    </div>
+    <h1 class="hero-title">
+      Chaluj<br>
+      <em>burger.</em>
+    </h1>
+    <p class="hero-sub">Čerstvé suroviny, dokonale vyladené chute a vychladené pivo. Príď ochutnať legendu, na ktorú sa oplatí cestovať.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 0 2-2h2a2 2 0 0 0 2 2"/></svg>
+        Pozrieť Menu
+      </a>
+      <a href="tel:+421918337708" class="btn-outline">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Objednať: 0918 337 708
+      </a>
+    </div>
+    <!-- Štatistiky sú teraz súčasťou flow, nekryjú tlačidlá -->
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">4.7★</div>
+        <div class="stat-lbl">Google hodnotenie</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-lbl">Čerstvé suroviny</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2+</div>
+        <div class="stat-lbl">Roky renomé</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- BURGER MESIACA -->
+<section id="special">
+  <div class="section-inner">
+    <div class="special-grid reveal">
+      <div class="special-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=800&q=80"
+          alt="Špeciál mesiaca – Chrenáč burger"
+          loading="lazy"
+        >
+        <span class="special-badge-img">🔥 Špeciál mesiaca</span>
+      </div>
+      <div class="special-content">
+        <div class="section-label">Obmedzená ponuka</div>
+        <div class="special-title">Chrenáč</div>
+        <p class="special-desc">
+          Niečo pre tých, čo majú radi poriadnu a výraznú chuť. Naše domáce hovädzie mäso, chrenový dresing, chrumkavá slaninka a tajná ingrediencia, ktorá to celé povýši na ďalšiu úroveň.
+        </p>
+        <div class="special-tags">
+          <span class="tag hot">🌶 Výrazné</span>
+          <span class="tag">🥩 Hovädzie</span>
+          <span class="tag">🧅 Slaninka</span>
+          <span class="tag">🍺 Ideálne s pivom</span>
+        </div>
+        <a href="tel:+421918337708" class="btn-primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Objednať so sebou
+        </a>
+        <p class="urgency">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Dostupný len tento mesiac · Kým zásoby vydržia
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Čo ponúkame</div>
+      <h2 class="section-title">Naše Menu</h2>
+      <p style="font-size:.85rem;color:var(--gray3);margin-bottom:1.5rem;">
+        Alebo si pozri celé interaktívne menu na
+        <a href="https://online.fliphtml5.com/wdrhx/ehwd/#p=1" target="_blank" rel="noopener" style="color:var(--amber);text-decoration:underline;">fliphtml5.com</a>
+      </p>
+    </div>
+
+    <div class="tabs reveal reveal-d1">
+      <button class="tab-btn active" data-tab="burgre">🍔 Burgre</button>
+      <button class="tab-btn" data-tab="hotdog">🌭 Hot Dog</button>
+      <button class="tab-btn" data-tab="wrapy">🌯 Wrapy</button>
+      <button class="tab-btn" data-tab="hranolky">🍟 Hranolky</button>
+      <button class="tab-btn" data-tab="salaty">🥗 Šaláty</button>
+      <button class="tab-btn" data-tab="malekpivu">🧀 K pivu</button>
+      <button class="tab-btn" data-tab="dresingy">🥣 Dresingy</button>
+      <button class="tab-btn" data-tab="napoje">🍺 Nápoje</button>
+    </div>
+
+    <!-- BURGRE -->
+    <div class="tab-panel active" id="tab-burgre">
+      <div class="menu-category-heading">Hovädzí burger</div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Classic</span><span class="card-price">7.90 € <span class="card-price-double">/ 10.40 €</span></span></div>
+        <p class="card-desc">155g hovädzieho mäsa, cheddar syr, šalát, skaramelizovaná cibuľka, paradajka, nakladané uhorky, Chaluj Mayo, BBQ</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-best">⭐ Klasika</span></div>
+      </div>
+
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Jalapeño 🌶🌶🌶</span><span class="card-price">8.80 € <span class="card-price-double">/ 11.30 €</span></span></div>
+        <p class="card-desc">155g hovädzieho mäsa, 2x cheddar, poľniček, domáca slaninka, jalapeño papričky, Sriracha Mayo, Aioli.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-hot">🌶 Pálivé</span></div>
+      </div>
+
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Los Pekelnikos 🌶🌶🌶🌶🌶</span><span class="card-price">8.80 € <span class="card-price-double">/ 11.50 €</span></span></div>
+        <p class="card-desc">155g hovädzieho mäsa, 2x Swiss syr, poľniček, Chaluj Chilli salsa, 2x domáca slanina, Sriracha Mayo, Aioli — na vlastné riziko!!!</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-hot">🔥 Extrémne pálivé</span></div>
+      </div>
+
+      <div class="menu-card reveal reveal-d3">
+        <div class="card-top"><span class="card-name">Číííz</span><span class="card-price">8.80 € <span class="card-price-double">/ 11.50 €</span></span></div>
+        <p class="card-desc">155g hovädzieho mäsa, bluecheese, vyprážaný camembert, skaramelizovaná cibuľka, šalát, sušená cibuľa, brusnicový džem, BBQ</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Aioli</span><span class="card-price">8.80 € <span class="card-price-double">/ 11.30 €</span></span></div>
+        <p class="card-desc">155g hovädzieho mäsa, cheddar syr, rukola, paradajka, nakladaná uhorka, červená cibuľka, domáca slanina, Aioli, BBQ</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Bryndzáčik</span><span class="card-price">8.90 € <span class="card-price-double">/ 11.40 €</span></span></div>
+        <p class="card-desc">155g hovädzieho mäsa, grilovaný oštiepok, šalát, sušená cibuľka, nakladaná červená cibuľa, domáca slaninka, bryndzový dip</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-best">🇸🇰 Slovenský špeciál</span></div>
+      </div>
+
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Pineapple Joe 🌶</span><span class="card-price">8.80 € <span class="card-price-double">/ 11.30 €</span></span></div>
+        <p class="card-desc">155g hovädzieho mäsa, cheddar syr, šalát, grilovaný ananás, pomarančová cibuľka, domáca slaninka, Sriracha Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+
+      <div class="menu-card reveal reveal-d3">
+        <div class="card-top"><span class="card-name">Big Man </span><span class="card-price">11.50 €</span></div>
+        <p class="card-desc">155g hovädzieho mäsa + 155g chrumkavého kuracieho mäsa, cheddar syr, poľniček, nakladané uhorky, červená cibuľka, 2x domáca slanina, Aioli, Chaluj Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-best">👑 Premiový</span></div>
+      </div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Trháčik</span><span class="card-price">8.50 € <span class="card-price-double">/ 11.00 €</span></span></div>
+        <p class="card-desc">155g trhaného bravčového mäsa, coleslaw, poľníček, smažená cibuľka, domáca slaninka, sweet chilli, BBQ</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+
+      <div class="menu-category-heading">Kurací burger</div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Čiken Red Coleslaw</span><span class="card-price">8.30 € <span class="card-price-double">/ 10.80 €</span></span></div>
+        <p class="card-desc">155g grilovaných kuracích pŕs, Swiss syr, šalát, Red coleslaw šalát, nakladané uhorky, domáca slaninka, Chaluj Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <p class="card-desc" style="color:var(--amber);font-size:.75rem;">+ Bezlepková žemla: +2.00 €</p>
+      </div>
+
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Crispy Čiken 🌶</span><span class="card-price">8.80 € <span class="card-price-double">/ 11.50 €</span></span></div>
+        <p class="card-desc">150g chrumkavých kuracích pŕs, šalát, domáca ovocná salsa (mango chutney, ananás, hruška), domáca slaninka, chilli vlasy, Sriracha Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-best">⭐ Obľúbené</span></div>
+      </div>
+
+      <div class="menu-category-heading">Veggie burger</div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Wege Wege 🌱</span><span class="card-price">9.00 € <span class="card-price-double">/ 11.50 €</span></span></div>
+        <p class="card-desc">120g Halloumi syr, rukola, grilovaná cuketa, grilovaná červená repa, paradajka, skaramelizovaná cibuľa, Horčicovo-medový dip, BBQ</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-veg">🌱 Vegetariánsky</span></div>
+      </div>
+
+      <div class="menu-category-heading">Pre najmenších</div>
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Detský</span><span class="card-price">7.50 €</span></div>
+        <p class="card-desc">155g kuracieho mäsa, šalát, paradajka, uhorka, cheddar, kečup, tatárska omáčka</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+
+      <div class="menu-note">* Ceny: jednoduchý / dvojitý. Bezlepková žemľa +2.00 €. Pri donáške/osobnom odbere balenie 0,30 €/ks.</div>
+    </div>
+
+    <!-- HOT DOG -->
+    <div class="tab-panel" id="tab-hotdog">
+      <div class="menu-category-heading">Hot Dog</div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Chaluj-Dog</span><span class="card-price">7.00 €</span></div>
+        <p class="card-desc">70g pečenej klobásky, maslové pečivo, cheddar syr, poľniček, paradajka, sušená cibuľka, kyslá uhorka, slaninka, mikrobylinky, Chaluj Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Fire-Dog 🌶🌶🌶</span><span class="card-price">7.00 €</span></div>
+        <p class="card-desc">70g pečenej klobásky, maslové pečivo, poľniček, nakladané jalapeño papričky, slaninka, cheddar syr, sušená cibuľka, mikrobylinky, Sriracha Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-hot">🌶 Pálivé</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Falafel-Dog 🌱</span><span class="card-price">7.00 €</span></div>
+        <p class="card-desc">70g Falafel, maslové pečivo, rukola šalát, paradajka, kyslá uhorka, sušená cibuľka, mikrobylinky, horčicovo-medový dresing</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-veg">🌱 Vegetariánsky</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d3">
+        <div class="card-top"><span class="card-name">Coleslaw-Dog</span><span class="card-price">7.00 €</span></div>
+        <p class="card-desc">70g pečenej klobásky, maslové pečivo, slaninka, coleslaw, cheddar, sušená cibuľka, poľniček, mikrobylinky, Chaluj Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+    </div>
+
+    <!-- WRAPY -->
+    <div class="tab-panel" id="tab-wrapy">
+      <div class="menu-category-heading">Wrapy </div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Chaluj Wrap</span><span class="card-price">8.00 €</span></div>
+        <p class="card-desc">Chrumkavé kuracie mäso, slaninka, paradajka, nakladané uhorky, červená cibuľka, Chaluj Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Badman Wrap 🌶🌶🌶</span><span class="card-price">8.00 €</span></div>
+        <p class="card-desc">Chrumkavé kuracie mäso, slaninka, paradajka, nakladané jalapeño papričky, červená cibuľka, niva, Sriracha dressing</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-hot">🌶 Pálivé</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Pulled Pork Wrap</span><span class="card-price">8.00 €</span></div>
+        <p class="card-desc">150g trhaného bravčového mäsa, slaninka, paradajka, nakladané uhorky, červená cibuľka, BBQ</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+    </div>
+
+    <!-- HRANOLKY -->
+    <div class="tab-panel" id="tab-hranolky">
+      <div class="menu-category-heading">Klasické hranolky</div>
+      <div class="menu-note">* Hranolky sú vážené v surovom stave.</div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Classic</span><span class="card-price">3.00 €</span></div>
+        <p class="card-desc">Stará dobrá klasika — chrumkavé a zlatisté.</p>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Chilli Hranolky</span><span class="card-price">3.10 €</span></div>
+        <p class="card-desc">Pre tých odvážnejších — s chilli korením.</p>
+        <div class="card-badges"><span class="badge badge-hot">🌶 Pikantné</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Bataty</span><span class="card-price">3.40 €</span></div>
+        <p class="card-desc">Kto má rád zmenu — chrumkavé batatové hranolky.</p>
+        <div class="card-badges"><span class="badge badge-best">⭐ Obľúbené</span></div>
+      </div>
+
+      <div class="menu-category-heading">Trochu iné hranolky</div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Pulled Pork BBQ Fries</span><span class="card-price">7.50 €</span></div>
+        <p class="card-desc">200g hranolky, 150g trhané bravčové mäso, cheddar, nakladané uhorky, sušená cibuľka, paradajka, mikrobylinky, Chaluj Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Western & Fries</span><span class="card-price">7.80 €</span></div>
+        <p class="card-desc">200g hranolky, 150g hovädzie mäso, slaninka, nakladané uhorky, sušená cibuľka, mikrobylinky, bryndzový dip</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-best">🇸🇰 Slovenský touch</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Jalapeños Fries 🌶🌶🌶</span><span class="card-price">7.50 €</span></div>
+        <p class="card-desc">200g hranolky, 150g trhané bravčové mäso, cheddar, jalapeños papričky, slaninka, sušená cibuľka, mikrobylinky, Sriracha Mayo</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-hot">🌶 Pálivé</span></div>
+      </div>
+    </div>
+
+    <!-- SALATY -->
+    <div class="tab-panel" id="tab-salaty">
+      <div class="menu-category-heading">Šaláty</div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Chalujburger Šalát</span><span class="card-price">8.30 €</span></div>
+        <p class="card-desc">Podľa výberu: kuracie / hovädzie / halloumi (150g). Trhaný baby šalát, cheddar, grilovaná slaninka, cherry paradajky, červená cibuľa, nakladané uhorky, Chaluj dressing. (380g)</p>
+        <div class="card-allergens">Alergény: 3, 7, 10</div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Chaluj & Fries Burger Šalát</span><span class="card-price">8.60 €</span></div>
+        <p class="card-desc">Podľa výberu: kuracie / hovädzie / halloumi (150g). Trhaný baby šalát, hranolky, cheddar, grilovaná slaninka, cherry paradajky, červená cibuľa, nakladané uhorky, Chaluj dressing. (420g)</p>
+        <div class="card-allergens">Alergény: 3, 7, 10</div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Chrum-Chrum Šalát</span><span class="card-price">9.00 €</span></div>
+        <p class="card-desc">150g chrumkavého kuracieho mäsa, trhaný baby šalát, cherry paradajky, červená cibuľa, hruška, slaninové chipsy, modrý syr, Horčicovo-pomarančový dresing. (380g)</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10</div>
+      </div>
+      <div class="menu-card reveal reveal-d3">
+        <div class="card-top"><span class="card-name">Grilovaná Repa so Sušenou Marhulou a Bryndzou</span><span class="card-price">9.00 €</span></div>
+        <p class="card-desc">Trhaný baby šalát, červená repa, domáca bryndza, vlašské orechy, sušená marhuľa, Horčicovo-medový dressing. (300g)</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 8, 10</div>
+        <div class="card-badges"><span class="badge badge-veg">🌱 Vegetariánsky</span></div>
+      </div>
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Veggie Šalát 🌱</span><span class="card-price">9.30 €</span></div>
+        <p class="card-desc">Chrumkavý halloumi syr, trhaný baby šalát, avokádo, cherry paradajky, kešu oriešky, pomaranč, červená cibuľa, Horčicovo-medový dressing. (380g)</p>
+        <div class="card-allergens">Alergény: 3, 7, 10</div>
+        <div class="card-badges"><span class="badge badge-veg">🌱 Vegetariánsky</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Fitness Šalát</span><span class="card-price">9.00 €</span></div>
+        <p class="card-desc">150g grilované kuracie mäso, trhaný baby šalát, cherry paradajky, olivy, kukurica, feta syr, Horčicovo-medová zálievka. (300g)</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 5, 10</div>
+      </div>
+    </div>
+
+    <!-- NIEČO MALÉ K PIVU -->
+    <div class="tab-panel" id="tab-malekpivu">
+      <div class="menu-category-heading">Niečo malé k pivu</div>
+
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Domáce Chaluj Stripsy</span><span class="card-price">7.00 €</span></div>
+        <p class="card-desc">300g stripsov s dresingom podľa vlastného výberu.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-best">⭐ Obľúbené</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Domáce Chaluj Chilli Stripsy 🌶</span><span class="card-price">7.00 €</span></div>
+        <p class="card-desc">350g stripsov s dresingom podľa vlastného výberu.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-hot">🌶 Pálivé</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Couple Box</span><span class="card-price">16.50 €</span></div>
+        <p class="card-desc">350g Chaluj stripsov, 4ks jalapeño cheese, 4ks cibuľových krúžkov, 250g hranoliek v šupke, 2x dresing.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-best">👫 Pre dvoch</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d3">
+        <div class="card-top"><span class="card-name">Kid Box</span><span class="card-price">7.00 €</span></div>
+        <p class="card-desc">2ks Mozzarella tyčiniek, 2ks Chaluj stripsov, 2ks mini Camembertu, 1x hranolky, kečup.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Family Box</span><span class="card-price">42.50 €</span></div>
+        <p class="card-desc">950g Chaluj stripsov, 8x chillicheese nugety, 8x cibuľové krúžky, 6x jalapeño cheese, 200g hranolčekov so šupkou, 200g batatových hranolčekov, 6x dresing, 4ks Coca-Cola (plech.).</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+        <div class="card-badges"><span class="badge badge-best">👨‍👩‍👧‍👦 Pre celú rodinu</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Syrové Red-Hot Jalapeño</span><span class="card-price">5.50 €</span></div>
+        <p class="card-desc">8ks jalapeño plnených syrom.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7</div>
+        <div class="card-badges"><span class="badge badge-hot">🌶 Pálivé</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Mini Camembert</span><span class="card-price">5.00 €</span></div>
+        <p class="card-desc">10ks vyprážaného mini Camembertu.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7</div>
+      </div>
+      <div class="menu-card reveal reveal-d3">
+        <div class="card-top"><span class="card-name">Chillicheese Nugety</span><span class="card-price">5.00 €</span></div>
+        <p class="card-desc">10ks vyprážaných syrových nugiet.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7, 10, 11</div>
+      </div>
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Mozzarella Tyčinky</span><span class="card-price">5.00 €</span></div>
+        <p class="card-desc">8ks vyprážané a chrumkavé.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7</div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Cibuľové Krúžky</span><span class="card-price">4.50 €</span></div>
+        <p class="card-desc">10ks — vyprážané a chrumkavé.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7</div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Kuracie Krídelká</span><span class="card-price">6.20 €</span></div>
+        <p class="card-desc">350g — vyprážané a chrumkavé.</p>
+        <div class="card-allergens">Alergény: 1, 3, 7</div>
+      </div>
+    </div>
+
+    <!-- DRESINGY -->
+    <div class="tab-panel" id="tab-dresingy">
+      <div class="menu-category-heading">Dresingy (50 ml) — 1.20 €</div>
+
+      <div class="menu-card reveal"><div class="card-top"><span class="card-name">Chaluj</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal reveal-d1"><div class="card-top"><span class="card-name">Aioli</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal reveal-d2"><div class="card-top"><span class="card-name">BBQ</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal reveal-d3"><div class="card-top"><span class="card-name">Sriracha 🌶🌶🌶</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal"><div class="card-top"><span class="card-name">Horčicovo-medový</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal reveal-d1"><div class="card-top"><span class="card-name">Paprikovo-syrový</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal reveal-d2"><div class="card-top"><span class="card-name">Vulcano 🌶🌶🌶</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal reveal-d3"><div class="card-top"><span class="card-name">Bryndzový</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal"><div class="card-top"><span class="card-name">Kečup</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal reveal-d1"><div class="card-top"><span class="card-name">Tatárska</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-card reveal reveal-d2"><div class="card-top"><span class="card-name">Sweet Chilli</span><span class="card-price">1.20 €</span></div></div>
+      <div class="menu-note">Možnosť prípravy aj na vegetariánsky štýl s halloumi syrom.</div>
+    </div>
+
+    <!-- NAPOJE -->
+    <div class="tab-panel" id="tab-napoje">
+      <div class="menu-category-heading">Čapované pivo</div>
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Svijanský Máz 11° (0.50 l)</span><span class="card-price">2.00 €</span></div>
+        <div class="card-badges"><span class="badge badge-best">🍺 Odporúčané</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Svijanský Máz 11° (0.30 l)</span><span class="card-price">1.60 €</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Svijany Radler — čierna ríbezľa a limetka (0.50 l)</span><span class="card-price">2.00 €</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d3">
+        <div class="card-top"><span class="card-name">Svijany Radler (0.30 l)</span><span class="card-price">1.60 €</span></div>
+      </div>
+
+      <div class="menu-category-heading">Fľaškové pivo</div>
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Pilsner Urquell 12° (0.50 l)</span><span class="card-price">2.20 €</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d1">
+        <div class="card-top"><span class="card-name">Desperados (0.33 l)</span><span class="card-price">2.00 €</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d2">
+        <div class="card-top"><span class="card-name">Zlatý Bažant Radler Citrón</span><span class="card-price">1.90 €</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d3">
+        <div class="card-top"><span class="card-name">Zlatý Bažant 0% Nealko</span><span class="card-price">1.90 €</span></div>
+      </div>
+
+      <div class="menu-category-heading">Nealkoholické nápoje</div>
+      <div class="menu-card reveal">
+        <div class="card-top"><span class="card-name">Kofola čapovaná (0.30 / 0.50 l)</span><span class="card-price">1.60 / 2.00 €</span></div>
+      </div>
+      <div class="menu-card reveal reveal-d1"><div class="card-top"><span class="card-name">Coca-Cola (0.33 l)</span><span class="card-price">1.90 €</span></div></div>
+      <div class="menu-card reveal reveal-d2"><div class="card-top"><span class="card-name">Coca-Cola Zero (0.33 l)</span><span class="card-price">1.90 €</span></div></div>
+      <div class="menu-card reveal reveal-d3"><div class="card-top"><span class="card-name">Fanta (0.33 l)</span><span class="card-price">1.90 €</span></div></div>
+      <div class="menu-card reveal"><div class="card-top"><span class="card-name">Sprite (0.33 l)</span><span class="card-price">1.90 €</span></div></div>
+      <div class="menu-card reveal reveal-d1"><div class="card-top"><span class="card-name">Fuzetea (0.33 l)</span><span class="card-price">1.90 €</span></div></div>
+      <div class="menu-card reveal reveal-d2"><div class="card-top"><span class="card-name">Kinley Tonic Water / Ginger Ale / Tonic Rosé (0.25 l)</span><span class="card-price">1.90 €</span></div></div>
+      <div class="menu-card reveal reveal-d3"><div class="card-top"><span class="card-name">Cappy džús (0.25 l)</span><span class="card-price">1.80 €</span></div></div>
+      <div class="menu-card reveal"><div class="card-top"><span class="card-name">Römerquelle minerálka (0.33 l)</span><span class="card-price">1.80 €</span></div></div>
+      <div class="menu-card reveal reveal-d1"><div class="card-top"><span class="card-name">Red Bull (0.25 l)</span><span class="card-price">2.50 €</span></div></div>
+      <div class="menu-card reveal reveal-d2"><div class="card-top"><span class="card-name">Voda s citrónom (0.1 l)</span><span class="card-price">0.30 €</span></div></div>
+
+      <div class="menu-category-heading">Teplé nápoje</div>
+      <div class="menu-card reveal"><div class="card-top"><span class="card-name">Ristretto / Espresso / Lungo</span><span class="card-price">2.00 €</span></div></div>
+      <div class="menu-card reveal reveal-d1"><div class="card-top"><span class="card-name">Čaj (podľa ponuky)</span><span class="card-price">2.00 €</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RECENZIE -->
+<section id="reviews">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Sociálny dôkaz</div>
+      <h2 class="section-title">Čo hovoria<br>ľudia?</h2>
+    </div>
+    <div class="rating-hero reveal reveal-d1">
+      <div class="rating-num">4.7</div>
+      <div class="rating-right">
+        <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star" style="opacity:.6">★</span></div>
+        <div class="rating-label">z 5 hviezdičiek · 100+ recenzií</div>
+        <div class="google-badge"><div class="google-g"></div>Google Maps hodnotenie</div>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Na tento burger som prišiel až z Prešova a určite to stálo za to. Najlepší smash burger, aký som mal v živote. Chaluj je iná liga.</p>
+        <div class="review-author">
+          <div class="author-avatar">MJ</div>
+          <div><div class="author-name">Marek J.</div><div class="author-city">Prešov</div></div>
+          <div class="review-date">pred 2 týždňami</div>
+        </div>
+      </div>
+      <div class="review-card reveal reveal-d1">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Jeden z najlepších burgrov na Slovensku. Čerstvé suroviny, perfektná žemľa a obsluha, ktorá to robí so srdcom. Vraciam sa pravidelne.</p>
+        <div class="review-author">
+          <div class="author-avatar">MK</div>
+          <div><div class="author-name">Michal K.</div><div class="author-city">Košice</div></div>
+          <div class="review-date">pred mesiacom</div>
+        </div>
+      </div>
+      <div class="review-card reveal reveal-d2">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Hot Cheesy N Chrunchy je závislosť. Aj pivo Svijany tu majú výborne vychladené. Skrytý klenot Starej Ľubovne — odporúčam každému!</p>
+        <div class="review-author">
+          <div class="author-avatar">ZH</div>
+          <div><div class="author-name">Zuzana H.</div><div class="author-city">Stará Ľubovňa</div></div>
+          <div class="review-date">pred 3 týždňami</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact" style="padding-bottom: 80px;">
+  <div class="footer-inner">
+    <div class="footer-top" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; padding-bottom: 2rem;">
+      
+      <div>
+        <div class="footer-logo">Chaluj<span> B&B</span></div>
+        <div class="footer-col-title" style="margin-top:1rem;">Otváracie hodiny</div>
+        <table class="hours-table">
+          <tr data-day="Pondelok"><td>Pondelok – Štvrtok</td><td>12:00 – 22:00</td></tr>
+          <tr data-day="Piatok"><td>Piatok</td><td>12:00 – 22:00</td></tr>
+          <tr data-day="Sobota"><td>Sobota</td><td>15:00 – 24:00</td></tr>
+          <tr class="closed" data-day="closed1"><td>Nedeľa</td><td>Zatvorené</td></tr>
+        </table>
+        <div class="info-bar" style="margin-top: 1rem; font-size: 0.85rem; color: var(--gray2); display: flex; flex-direction: column; gap: 0.3rem;">
+          <span>📶 WiFi: <strong>CHALUJBURGER</strong> (veľké písmená)</span>
+          <span>🐾 Zodpovedný vedúci: <strong>Richard Venditura</strong> · 0948 627 711</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Kde nás nájdeš</div>
+        <p class="addr-block" style="margin-bottom: 1rem; line-height: 1.4;">
+          Obchodná 1110/3<br>
+          064 01 Stará Ľubovňa<br>
+          Slovenská republika
+        </p>
+        
+        <div class="map-embed-wrap" style="margin-bottom: 0.5rem; border-radius: 8px; overflow: hidden;">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2602.043516598583!2d20.684921977051392!3d49.30104647139744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473e13f7467e3053%3A0xe10298142492ef15!2sChaluj%20burger%20%26%20beer!5e0!3m2!1ssk!2ssk!4v1717860000000!5m2!1ssk!2ssk"
+            width="100%"
+            height="220"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            title="Chaluj Burger & Beer — mapa">
+          </iframe>
+        </div>
+
+        <a
+          class="map-link"
+          href="https://maps.google.com/?q=Chaluj+burger+%26+beer,+Obchodn%C3%A1+1110/3,+064+01+Star%C3%A1+%C5%BDubov%C5%A8a"
+          target="_blank"
+          rel="noopener"
+          style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; text-decoration: none; color: var(--primary);">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Navigovať · Google Mapy
+        </a>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Kontakt</div>
+        <div class="contact-phone" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.3rem;">
+          <a href="tel:+421918337708" style="text-decoration: none; color: inherit;">0918 337 708</a>
+        </div>
+        <p style="font-size:.85rem;color:var(--gray2);margin-bottom:.3rem;">Objednávky so sebou vítame!</p>
+        <a href="tel:+421918337708" class="btn-primary" style="display:inline-flex;gap:.4rem;font-size:.85rem;padding:.7rem 1.3rem;margin-top:.5rem;text-decoration:none;align-items:center;">
+          📞 Zavolať teraz
+        </a>
+        <div class="social-links" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+          <a class="social-btn"
+             href="https://www.facebook.com/Chalujburgerbeer/?locale=sk_SK"
+             aria-label="Facebook" target="_blank" rel="noopener">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a class="social-btn"
+             href="https://www.instagram.com/chalujburger/"
+             aria-label="Instagram" target="_blank" rel="noopener">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a class="social-btn"
+             href="https://maps.google.com/?q=Chaluj+burger+%26+beer,+Obchodn%C3%A1+1110/3,+064+01+Star%C3%A1+%C5%BDubov%C5%A8a"
+             aria-label="Google Maps" target="_blank" rel="noopener">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem; color: var(--gray2);">
+      <span>© 2026 Chaluj Burger & Beer · Obchodná 1110/3, Stará Ľubovňa</span>
+      <span>Ceny sú vrátane DPH · Balenie pri donáške: 0,30 €/ks</span>
+    </div>
+  </div>
+</footer>
+
+<div class="float-cta">
+  <a href="tel:+421918337708" style="text-decoration:none;">📞 Objednať so sebou — 0918 337 708</a>
+</div>
+
+<style>
+  /* Oprava mriežky pre rozdelenie pätičky na 2 stĺpce */
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+  .footer-header-split {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  .footer-contact-inline {
+    text-align: right;
+  }
+  .footer-bottom-split {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--dark3);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--gray2);
+  }
+  @media (max-width: 768px) {
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .footer-header-split, .footer-bottom-split {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.5rem;
+    }
+    .footer-contact-inline {
+      text-align: center;
+    }
+    .social-links {
+      justify-content: center !important;
+    }
+    .footer-bottom-split {
+      gap: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  // TAB SWITCHING
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + target).classList.add('active');
+    });
+  });
+
+  // SCROLL REVEAL
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // PARALLAX HERO
+  const heroBg = document.getElementById('heroBg');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (heroBg && y < window.innerHeight) heroBg.style.transform = `scale(1.08) translateY(${y * 0.25}px)`;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  // HIGHLIGHT TODAY'S HOURS
+  const dayIndex = new Date().getDay(); // 0=ned,1=pon,...,6=sob
+  const rows = document.querySelectorAll('.hours-table tr');
+  rows.forEach(row => row.classList.remove('today'));
+  if (dayIndex >= 1 && dayIndex <= 4) rows[0] && rows[0].classList.add('today'); // Po-Št
+  if (dayIndex === 5) rows[1] && rows[1].classList.add('today'); // Pia
+  if (dayIndex === 6) rows[2] && rows[2].classList.add('today'); // Sob
+
+  // NAV SCROLL
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 60 ? 'rgba(13,13,13,0.97)' : 'rgba(13,13,13,0.85)';
+  }, { passive: true });
+</script>
+</body>
+</html>
